@@ -6,6 +6,8 @@ Programs from 50apps challenge.
 Folder structure
 ====
 
+week02 - WWW Search App
+
 week01 - Crawler in python
 
 Usage:
