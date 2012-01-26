@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="utf-8" />
+ <title>50 apps challenge - Week 02</title>
+ </head>
+ <body>
+	<header><h1>50 apps challenge - Week 02</h1></header>	
+	<form method="post" action="/crawl/go">{% csrf_token %}
+		<input type="url" required placeholder="http://www.sitetocrawl.com" name="URL must begin with http://" />
+		<input type="submit" />
+	</form>
+ </body>
+ </html>
