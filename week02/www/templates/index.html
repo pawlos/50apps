@@ -8,6 +8,8 @@
 	<header><h1>50 apps challenge - Week 02</h1></header>	
 	<form method="post" action="/crawl/go">{% csrf_token %}
 		<input type="url" required placeholder="http://www.sitetocrawl.com" name="URL must begin with http://" />
+		<input type="number" required placeholder="depth" min="1" max="10" name="depth to crawl" />
+		<input type="text" required placeholder="phrase" name="phrase to search inside pages" />
 		<input type="submit" />
 	</form>
  </body>
