@@ -14,6 +14,21 @@
 	</form>
 	{% if url %}
 		<p>Crawled {{url}} levels{{depth}} deep for {{phrase}}.</p>
+		<table>
+			<tr>
+				<th>Url</th><th>Depth</th>
+			</tr>
+			{% for found in urls %}
+			<tr>
+				<td><a href="{{found.url}}">{{found.url}}</a></td>
+				<td>{{found.depth}}</td>
+			</tr>
+			{% empty %}
+				<tr>
+					<td colspan="2">Nothing found</td>
+				</tr>	
+			{%endfor%}			
+		</table>
 	{% endif %}
 	<footer>
 	<img src="http://code.google.com/appengine/images/appengine-silver-120x30.gif" 
