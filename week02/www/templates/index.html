@@ -7,10 +7,16 @@
  <body>
 	<header><h1>50 apps challenge - Week 02</h1></header>	
 	<form method="post" action="/crawl/go">{% csrf_token %}
-		<input type="url" required placeholder="http://www.sitetocrawl.com" name="URL must begin with http://" />
-		<input type="number" required placeholder="depth" min="1" max="10" name="depth to crawl" />
-		<input type="text" required placeholder="phrase" name="phrase to search inside pages" />
+		<input type="url" required placeholder="http://www.sitetocrawl.com" name="url" />
+		<input type="number" required placeholder="depth" min="1" max="10" name="depth" />
+		<input type="text" required placeholder="phrase" name="phrase" />
 		<input type="submit" />
 	</form>
+	{% if url %}
+		<p>Crawled {{url}} levels{{depth}} deep for {{phrase}}.</p>
+	{% endif %}
+	<footer>
+	<img src="http://code.google.com/appengine/images/appengine-silver-120x30.gif" 
+alt="Powered by Google App Engine" /></footer>
  </body>
  </html>
