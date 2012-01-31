@@ -1,0 +1,42 @@
+Simple Part:
+- Use the Python website that you created in week 2 assignment.
+- Accept a url as input
+- Read page content of the url
+- Split the content into words and find out the number of occurences
+of every word in the page.
+- Do not consider the following words: a, an, the, on, in, for, and,
+to
+- Show a simple bar graph on the ui showing the top 10 words with
+respective count (X axis - words, Y axis - height of the bar as per
+count of word in page) (Do this using HTML5. Add whatever transitions
+or effects if you want to beautify it)
+- Also find out the longest and the shortest word in the page and
+mention in UI. (Longest and shortest - as per number of characters in
+a word)
+ONE BIG CONDITION - YOU CANNOT USE ANY LOOPING CONSTRUCTS LIKE FOR AND
+WHILE. (Hint: use map and lambda expressions)
+Try to use map, filter, reduce functionality of Python. Explore use of
+lambda, pure functions, generators, etc.
+
+
+Complex part 1: (Optional. if you complete simple part and want to
+take up something more challenging)
+- Store word counts of the url in database, e.g. in sqlite3
+- If the user enters more such urls consecutively, do same processing
+and store word counts per site in the db.
+- There will be a search textbox in UI. The user can enter a word in
+the text box and click "Search Url" button.
+- On click of "Search Url", show the urls from db in order as per the
+number of occurences of that word in that url
+
+
+Yet more.. Complex part 2:
+Demonstrate how MapReduce of the above example can be done in a
+distributed environment
+
+
+Please use this thread to discuss the problem and how to get the
+solution.
+Also, if you feel we need to explore any more features of Python,
+please let the group know here. (because this is the last week of
+Python unless we all feel we need to explore it more)
