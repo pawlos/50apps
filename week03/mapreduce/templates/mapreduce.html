@@ -3,12 +3,23 @@
 <head>
 	<meta charset="utf-8" />
 	<title>50 apps challenge - Week 03 - MapReduce</title>
+	<script type="application/javascript">
+		function drawChart()
+		{
+			var canvas = document.getElementById("chart");
+			if (canvas.getContext) {
+				var ctx = canvas.getContext("2d");
+			}
+		}
+	</script>
 </head>
 <body>
 	<header><h1>Counting words using MapReduce in Python</h1></header>
 	<form method="post" action="/mapreduce/">{% csrf_token %}
-		{{form.as_p}}
-		<input type="submit" value="Submit" />
+		<input type="url" required placeholder="Enter url" />
+		<input type="submit" value="Submit" />		
 	</form>
+	<canvas id="chart" width="800px" height="200px">
+	</canvas>
 </body>
 </html>

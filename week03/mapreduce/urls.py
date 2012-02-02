@@ -5,6 +5,7 @@ from django.conf.urls.defaults import patterns, include, url
 # admin.autodiscover()
 
 urlpatterns = patterns('',
+    (r'^mapreduce/$', 'views.mapReduce')    
     # Examples:
     # url(r'^$', 'mapreduce.views.home', name='home'),
     # url(r'^mapreduce/', include('mapreduce.foo.urls')),
