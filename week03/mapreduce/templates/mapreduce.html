@@ -16,7 +16,7 @@
 <body>
 	<header><h1>Counting words using MapReduce in Python</h1></header>
 	<form method="post" action="/mapreduce/">{% csrf_token %}
-		<input type="url" required placeholder="Enter url" />
+		<input type="url" required placeholder="Enter url" name="url" />
 		<input type="submit" value="Submit" />		
 	</form>
 	<canvas id="chart" width="800px" height="200px">
