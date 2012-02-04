@@ -1,7 +1,7 @@
 import functools
 
 def mapReduce(list):	
-	print(functools.reduce(lambda x,y: reduceFunc(x,y), map(lambda x: {x: 1}, filter(filterFunc, list))))
+	return functools.reduce(lambda x,y: reduceFunc(x,y), map(lambda x: {x: 1}, filter(filterFunc, list)))
 		
 def reduceFunc(x,y):	
 	second = y.popitem()	
