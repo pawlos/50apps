@@ -4,22 +4,39 @@
 	<meta charset="utf-8" />
 	<title>50 apps challenge - Week 03 - MapReduce</title>
 	<script type="application/javascript">
+		{% if maxOccurance %}
+		var max = {{ maxOccurance }};		
+		{% else %}
+		var max = 0;
+		{% endif %}
 		function drawChart()
 		{
 			var canvas = document.getElementById("chart");
 			if (canvas.getContext) {
 				var ctx = canvas.getContext("2d");
+				ctx.fillText("Shortest word: {{shortest}}", 10,20);
+				ctx.fillText("Longest word: {{longest}}", 10,40);
+				var posX = 20;
+				var posY = canvas.height;
+				var unit = canvas.height/max-80;
+				{% for key,value in occurences.items %}
+				ctx.fillStyle = '#000';				
+				ctx.fillText("{{key}} ({{value}})", posX, posY);				
+				ctx.fillStyle = '#F40';
+				ctx.fillRect(posX-10, posY-20-unit*{{value}},40,unit*{{value}});
+				posX += 80;
+				{% endfor %}
 			}
 		}
 	</script>
 </head>
-<body>
+<body {% if shortest %} onload="drawChart()" {%endif%}>
 	<header><h1>Counting words using MapReduce in Python</h1></header>
 	<form method="post" action="/mapreduce/">{% csrf_token %}
 		<input type="url" required placeholder="Enter url" name="url" />
 		<input type="submit" value="Submit" />		
-	</form>
-	<canvas id="chart" width="800px" height="200px">
+	</form>	
+	<canvas id="chart" width="800" height="600">
 	</canvas>
 </body>
 </html>

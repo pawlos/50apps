@@ -29,13 +29,13 @@ def filterFunc(x):
 def findShortest(list):
 	return reduce(lambda x,y: findShortestWord(x,y), map(lambda x: {x: len(x)}, filter(filterFunc, list)))
 
-def mapReduce(list):	
+def findOccurence(list):	
 	return reduce(lambda x,y: reduceFunc(x,y), map(lambda x: {x: 1}, filter(filterFunc, list)))
 	
 def findLongest(list):
 	return reduce(lambda x,y: findLongestWord(x,y), map(lambda x: {x: len(x)}, filter(filterFunc, list)))
 
 list = ["two","acta","acta","bacta","a","the","two", "to",'single','most','most','most','most']
-print mapReduce(list)
+print findOccurence(list)
 print findShortest(list)
 print findLongest(list)
