@@ -2,19 +2,26 @@ from django.core.context_processors import csrf
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import Context, loader
-import urllib
+import urllib2
 import logic
+import re
+import BeautifulSoup
+import dehtml
 
 def mapReduce(request):	
 	t = loader.get_template('mapreduce.html')
 	c = Context()
 	c.update(csrf(request))
 	if request.method == 'POST':		
-		#url = request.POST['url']		
-		#content = urlopen(url).read() 
-		occurences = logic.findOccurence(['ala','ma','kota','a','kot','ma','ale'])
-		shortest = logic.findShortest(['ala','ma','kota','a','kot','ma','ale'])
-		longest = logic.findLongest(['ala','ma','kota','a','kot','ma','ale'])
+		url = request.POST['url']		
+		content = urllib2.urlopen(url).read()
+		soup = BeautifulSoup.BeautifulSoup(content)		
+		text = dehtml.strip_tags(soup.body.prettify())
+		text = re.sub(r"[ \t\v]+", " ", text)
+		list = text.split(' ')		
+		occurences = logic.findOccurence(list)
+		shortest = logic.findShortest(list)
+		longest = logic.findLongest(list)
 		c['occurences'] = occurences
 		c['shortest'] = shortest.popitem()[0]
 		c['longest'] = longest.popitem()[0]

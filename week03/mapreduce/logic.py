@@ -13,6 +13,8 @@ def findShortestWord(x,y):
 	if second[1] < first[1]:
 		return {second[0]: second[1]}
 	else:
+		if not first:
+			return {second[0]: second[1]}
 		return {first[0]: first[1]}
 
 def findLongestWord(x,y):	

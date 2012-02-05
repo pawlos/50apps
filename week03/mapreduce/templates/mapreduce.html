@@ -30,7 +30,7 @@
 		}
 	</script>
 </head>
-<body {% if shortest %} onload="drawChart()" {%endif%}>
+<body {% if maxOccurance %} onload="drawChart()" {%endif%}>
 	<header><h1>Counting words using MapReduce in Python</h1></header>
 	<form method="post" action="/mapreduce/">{% csrf_token %}
 		<input type="url" required placeholder="Enter url" name="url" />
