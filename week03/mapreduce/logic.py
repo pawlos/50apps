@@ -1,3 +1,4 @@
+import re
 
 def reduceFunc(x,y):	
 	second = y.popitem()	
@@ -24,7 +25,10 @@ def findLongestWord(x,y):
 		return {second[0]: second[1]}
 	else:
 		return {first[0]: first[1]}
-	
+
+def filterNonWords(x):
+	return re.match("^\w+$", x)
+
 def filterFunc(x):
 	return x not in ['a', 'an','the','on','in','for','and','to']
 	

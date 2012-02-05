@@ -5,25 +5,31 @@
 	<title>50 apps challenge - Week 03 - MapReduce</title>
 	<script type="application/javascript">
 		{% if maxOccurance %}
-		var max = {{ maxOccurance }};		
+		var max = {{ maxOccurance.1 }};		
 		{% else %}
 		var max = 0;
+		{% endif %}
+		{% if itemCount %}
+		var width = 80*{{itemCount}};
+		{% else %}
+		var width = 800;
 		{% endif %}
 		function drawChart()
 		{
 			var canvas = document.getElementById("chart");
 			if (canvas.getContext) {
+				canvas.width = width;				
 				var ctx = canvas.getContext("2d");
-				ctx.fillText("Shortest word: {{shortest}}", 10,20);
-				ctx.fillText("Longest word: {{longest}}", 10,40);
+				ctx.fillText("Shortest word: {{shortest.0}}", 10,20);
+				ctx.fillText("Longest word: {{longest.0}}", 10,40);
 				var posX = 20;
 				var posY = canvas.height;
-				var unit = canvas.height/max-80;
-				{% for key,value in occurences.items %}
+				var unit = canvas.height/parseFloat(max);
+				{% for word, occur in occurences %}
 				ctx.fillStyle = '#000';				
-				ctx.fillText("{{key}} ({{value}})", posX, posY);				
+				ctx.fillText("{{word}} ({{occur}})", posX, posY);				
 				ctx.fillStyle = '#F40';
-				ctx.fillRect(posX-10, posY-20-unit*{{value}},40,unit*{{value}});
+				ctx.fillRect(posX-10, posY-20-unit*{{occur}}+80,40,unit*{{occur}}-80);
 				posX += 80;
 				{% endfor %}
 			}
