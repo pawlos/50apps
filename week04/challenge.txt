@@ -1,0 +1,29 @@
+So here goes this week's problem statement. While you work on it, try
+to use as many built in HTML5 tags as possible and use more of CSS3
+elements for styling.
+
+Simple Part:
+- Create a sticky notes application using HTML5
+- User should be able to create a blank sticky note and add text into
+it. The sticky notes look like small coloured rectangles holding user
+defined text
+- User can create multiple such sticky's and all of them appear in the
+same browser page
+- User can drag sticky's around in the browser page and place them
+wherever convenient
+- All these data are saved on the client side as and when the user
+types in. (For details of how you can save data using HTML5, please
+see http://www.html5rocks.com/en/features/storage)
+
+
+Complex part: (Optional. if you complete simple part and want to take
+up something more challenging)
+- Allow user to select one of 4 predefined background colors for
+sticky to depict its priority/importance
+- Show gradient colouring for sticky's background
+- Ability to delete sticky
+- Add current time to sticky header
+
+
+Please post in any questions and links to HTML5 tutorials you know of,
+here.
