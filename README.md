@@ -6,6 +6,8 @@ Programs from 50apps challenge.
 Folder structure
 ====
 
+week04 - StickyNotes app in HTML5
+
 week03 - using Map/Reduce
 
 week02 - WWW Search App
