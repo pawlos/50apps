@@ -1,30 +1,30 @@
 import re
 
 def reduceFunc(x,y):	
-	second = y.popitem()	
-	if second[0] in x:
-		x[second[0]] += second[1]
+	word, count = y.popitem()	
+	if word in x:
+		x[word] += count
 	else:
-		x[second[0]] = second[1]
+		x[word] = count
 	return x
 
 def findShortestWord(x,y):	
-	second = y.popitem()	
-	first = x.popitem()
-	if second[1] < first[1]:
-		return {second[0]: second[1]}
+	secondWord, secondLen = y.popitem()	
+	firstWord, firstLen = x.popitem()
+	if secondLen < firstLen:
+		return { secondWord: secondLen}
 	else:
-		if not first:
-			return {second[0]: second[1]}
-		return {first[0]: first[1]}
+		if not firstWord:
+			return { secondWord: secondLen}
+		return {firstWord: firstLen}
 
 def findLongestWord(x,y):	
-	second = y.popitem()	
-	first = x.popitem()
-	if second[1] > first[1]:
-		return {second[0]: second[1]}
+	secondWord, secondLen = y.popitem()	
+	firstWord, firstLen = x.popitem()
+	if secondLen > firstLen:
+		return {secondWord: secondLen}
 	else:
-		return {first[0]: first[1]}
+		return {firstWord: firstLen}
 
 def filterNonWords(x):
 	return re.match("^\w+$", x)
