@@ -1,7 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="utf-8" />
 <title>Sticky Notes in HTML5</title>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 </head>
 <body>
+<img id="stickyNote" src="stickynote_trans.png" style="display: none" alt="http://www.flickr.com/photos/winning-information/2325865367/sizes/m/in/faves-nathanwells/" />
+<canvas id="board" width="800" height="600">
+</canvas>
+<script type="text/javascript">
+var note = {
+	_text: "",
+	_positionX: 0,
+	_positionY: 0,
+	
+	draw: function() {
+	},
+	
+	setText: function(text) {
+		_text = text;
+	},
+	
+	setPosition: function(posX, poxY) {
+		_positionX = posX;
+		_poistionY = posY;
+	}
+};
+
+jQuery(document).ready(function() {
+	init();
+	jQuery('#board').click(function() {
+		addNote(event);
+	});
+});
+function init() {
+	var canvas = document.getElementById("board");
+	canvas.width = document.width;
+	canvas.height = document.height;
+}
+function addNote(e) {  
+     var note = document.getElementById("stickyNote");
+     var canvas = document.getElementById("board");
+     var ctx = canvas.getContext("2d");
+     //ctx.globalAlpha = 0.75;
+     ctx.drawImage(note, e.clientX - 114, e.clientY - 51, 278,278);  
+};
+</script>
 </body>
+</html>
