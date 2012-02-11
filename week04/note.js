@@ -78,6 +78,10 @@ Note.prototype.edit = function() {
 		jQuery('#board').attr('action', 'performed');
 		board.updateNoteText(event.data, jQuery(this).val());
 	});
+	jQuery('#textarea').on('keypress', function(event) {
+		if (event.keyCode === 13) //Enter
+			jQuery(this).trigger('blur');
+	});
 };
 	
 Note.prototype.setPosition = function(posX, posY) {
