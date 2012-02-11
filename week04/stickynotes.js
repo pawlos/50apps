@@ -34,7 +34,7 @@ Board.prototype.init = function(context) {
 	this._context = context;
 };
 
-Board.prototype.getNoteBelowCursor = function(event) {
+Board.prototype.getNoteBelowCursorOnPin = function(event) {
 	var posX = event.offsetX;
 	var posY = event.offsetY;
 	for(key in this._notes) {
@@ -49,9 +49,25 @@ Board.prototype.getNoteBelowCursor = function(event) {
 	}	
 }
 
+Board.prototype.getNoteBelowCursorOnClose = function(event) {
+	var posX = event.offsetX;
+	var posY = event.offsetY;
+	for(key in this._notes) {
+		var note = this._notes[key];
+		var noteClosePosX = note._positionX - note._pinPosX + 221;
+		var noteClosePosY = note._positionY - note._pinPosY + 23;
+		if ((noteClosePosX - 16 < posX) &&
+		    (noteClosePosX + 16 > posX) &&
+		    (noteClosePosY - 16 < posY) &&
+		    (noteClosePosY + 16 > posY))
+			return note;
+	}	
+}
+
 function Note() {
 }
 
+Note.prototype._id = 0;
 Note.prototype._width = 278;
 Note.prototype._height = 278;
 Note.prototype._pinPosX = 114;
@@ -60,6 +76,14 @@ Note.prototype._text = null;
 Note.prototype._positionX = 0;
 Note.prototype._positionY = 0;
 Note.prototype._date = "";
+
+Note.prototype.getId = function() {
+	return this._id;
+}
+
+Note.prototype.setId = function(id) {
+	this._id = id;
+}
 	
 Note.prototype.draw = function(context) {
 	var img = document.getElementById("stickyNoteImg");		
@@ -103,10 +127,20 @@ jQuery(document).ready(function() {
 	var canvas = document.getElementById("board");
 	init(canvas);	
 	var board = new Board;
+	week04.webdb.open();
+	week04.webdb.createTable();
 	board.init(canvas.getContext('2d'))
 	jQuery('#board').click(function() {
 		jQuery(this).off('mousemove');
-		var activeNote = board.getNoteBelowCursor(event);
+		var noteToBeDeleted = board.getNoteBelowCursorOnClose(event);
+		if (noteToBeDeleted)
+		{
+			board.removeNote(noteToBeDeleted);
+			week04.webdb.deleteNote(noteToBeDeleted);
+			return;
+		}
+			
+		var activeNote = board.getNoteBelowCursorOnPin(event);
 		if (activeNote)
 		{
 			document.setMoveCursor();
@@ -114,13 +148,14 @@ jQuery(document).ready(function() {
 		else
 		{
 			document.setDefaultCursor();
-		}
+		}		
 		var moving = jQuery(this).attr('move');
 		if (!activeNote && !moving)
 		{
 			var n = new Note;
 			n.setDate(new Date());
 			n.setPosition(event.offsetX, event.offsetY);
+			week04.webdb.saveNote(n);
 			board.addNote(n);
 		} else {
 			if (!moving)
@@ -144,6 +179,7 @@ jQuery(document).ready(function() {
 		}
 	});
 });
+
 function init(canvas) {
 	canvas.width = document.width;
 	canvas.height = document.height;
