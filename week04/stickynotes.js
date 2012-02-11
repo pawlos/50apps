@@ -27,7 +27,7 @@ Board.prototype.redraw = function() {
 
 Board.prototype.removeNote = function(note) {
 	var index = this._notes.indexOf(note);
-	this._notes.splice(index,1);
+	this._notes.splice(index, 1);
 	week04.webdb.deleteNote(note);
 	note.clear(this._context);
 };
@@ -52,10 +52,11 @@ Board.prototype.getNoteBelowCursorOnPin = function(event) {
 		var note = this._notes[key];
 		var notePinPosX = note._positionX;
 		var notePinPosY = note._positionY;
-		if ((notePinPosX - 20 < posX) &&
-		    (notePinPosX + 20 > posX) &&
-		    (notePinPosY - 20 < posY) &&
-		    (notePinPosY + 20 > posY))
+		var pinSize = note._pinSize;
+		if ((notePinPosX - pinSize < posX) &&
+		    (notePinPosX + pinSize > posX) &&
+		    (notePinPosY - pinSize < posY) &&
+		    (notePinPosY + pinSize > posY))
 			return note;
 	}	
 }
@@ -81,8 +82,9 @@ function Note() {
 Note.prototype._id = 0;
 Note.prototype._width = 278;
 Note.prototype._height = 278;
-Note.prototype._pinPosX = 114;
+Note.prototype._pinPosX = 128;
 Note.prototype._pinPosY = 51;
+Note.prototype._pinSize = 30;
 Note.prototype._text = null;
 Note.prototype._positionX = 0;
 Note.prototype._positionY = 0;
@@ -174,12 +176,6 @@ jQuery(document).ready(function() {
 			{
 				jQuery(this).attr('move','on');
 				jQuery(this).on('mousemove', function() {															
-					//board.removeNote(activeNote);
-					//var n = new Note;
-					//n.setDate(activeNote.getDate());
-					//n.setText(activeNote.getText());
-					//activeNote = n;
-					//activeNote.updatePosition(event.offsetX, event.offsetY);
 					board.updateNotePosition(activeNote, event.offsetX, event.offsetY);
 				});
 			}
