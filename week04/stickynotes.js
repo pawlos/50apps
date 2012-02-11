@@ -38,6 +38,7 @@ Board.prototype.removeNote = function(note) {
 	this._notes.splice(index, 1);
 	week04.webdb.deleteNote(note);
 	note.clear(this._context);
+	this.redraw();
 };
 
 Board.prototype.init = function(context) {
@@ -49,6 +50,13 @@ Board.prototype.init = function(context) {
 Board.prototype.updateNotePosition = function(note, posX, posY) {
 	note.clear(this._context);
 	note.setPosition(posX, posY);
+	week04.webdb.updateNote(note);
+	this.redraw();
+};
+
+Board.prototype.updateNoteText = function(note, text) {
+	note.clear(this._context);
+	note.setText(text);
 	week04.webdb.updateNote(note);
 	this.redraw();
 };
@@ -183,6 +191,18 @@ Note.prototype.getDate = function() {
 Note.prototype.setDate = function(date) {
 	this._date = date;
 };
+
+Note.prototype.edit = function() {
+	var posX = this._positionX - this._pinPosX + 35;
+	var posY = this._positionY + 135;			
+	jQuery('#textarea').css('left', posX+'px').css('top', posY+'px').val(this._text).show().focus();
+	jQuery('#textarea').on('blur', this, function(event) {
+		jQuery(this).off('blur');
+		jQuery(this).hide();		
+		jQuery('#board').attr('action', 'performed');
+		board.updateNoteText(event.data, jQuery(this).val());
+	});
+};
 	
 Note.prototype.setPosition = function(posX, posY) {
 	this._positionX = posX;
@@ -220,16 +240,25 @@ jQuery(document).ready(function() {
 		if (noteToBeDeleted)
 		{
 			board.removeNote(noteToBeDeleted);
-			jQuery(this).attr('deleted', 'on');
+			jQuery(this).attr('action', 'performed');
 		}
 		return false;
 	});
 	
-	jQuery('#board').on('click', function() {
-		var justDeleted = jQuery(this).attr('deleted');
-		if (justDeleted)
+	jQuery('#board').on('click', function(event) {
+		var noteToBeEdited = board.getNoteBelowCursorOnText(event);
+		if (noteToBeEdited)
 		{
-			jQuery(this).removeAttr('deleted');
+			jQuery(this).attr('action', 'performed');
+			noteToBeEdited.edit();			
+		}
+	});
+	
+	jQuery('#board').on('click', function() {
+		var action = jQuery(this).attr('action');
+		if (action)
+		{
+			jQuery(this).removeAttr('action');
 			return;
 		}
 		jQuery('#board').off('mousemove', move);
@@ -257,7 +286,7 @@ jQuery(document).ready(function() {
 	});
 });
 
-function move( event, activeNote) {
+function move(event) {
 	document.setMovingCursor();
 	board.updateNotePosition(event.handleObj.data, event.offsetX, event.offsetY);				
 }
