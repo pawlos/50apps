@@ -7,6 +7,8 @@ Folder structure
 ====
 
 week04 - StickyNotes app in HTML5
+Usage:
+To move sticky note after placing it, click on the pin (around lower part).
 
 week03 - using Map/Reduce
 
