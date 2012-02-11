@@ -1,9 +1,9 @@
 var board;
-jQuery(document).ready(function() {
+jQuery('#stickyNoteImg').load(function() {
 	var canvas = document.getElementById("board");
 	init(canvas);	
 	board = new Board;	
-	board.init(canvas.getContext('2d'))
+	board.init(canvas.getContext('2d'));	
 	jQuery('#board').on('mousemove', function() {
 		var result = board.getNoteBelowCursor(event);
 		if (result)		
@@ -68,6 +68,7 @@ jQuery(document).ready(function() {
 			}
 		}
 	});
+	board.redraw();
 });
 
 function move(event) {

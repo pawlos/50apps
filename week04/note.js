@@ -46,10 +46,9 @@ Note.prototype.draw = function(context) {
 	context.restore();
 };
 
-Note.prototype.clear = function(context) {
-	context.save();
-	context.fillStyle = 'rgb(255,255,255)';
-	context.fillRect(this._positionX - this._pinPosX, this._positionY - this._pinPosY, this._width, this._height);
+Note.prototype.clear = function(context) {	
+	context.save();	
+	context.clearRect(this._positionX - this._pinPosX, this._positionY - this._pinPosY, this._width, this._height);	
 	context.restore();
 };
 	
