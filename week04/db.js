@@ -21,8 +21,15 @@ week04.webdb.onGeneralSuccess = function(tx,r) {
 }
 
 week04.webdb.createTable = function() {	
-	this.db.transaction(function(tx) {		
+	this.db.transaction(function(tx) {
+		//tx.executeSql("DROP TABLE StickyNotesBeta");
 		tx.executeSql("CREATE TABLE IF NOT EXISTS StickyNotesBeta(ID INTEGER PRIMARY KEY ASC, Note TEXT, date DATETIME, posX INT, posY INT)", []);
+	});
+}
+
+week04.webdb.loadNotes = function(renderFunc) {
+	this.db.transaction(function(tx) {
+		tx.executeSql("SELECT * FROM StickyNotesBeta", [], renderFunc, this.onError);
 	});
 }
 

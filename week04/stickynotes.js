@@ -20,9 +20,10 @@ function Board() {
 Board.prototype._notes = [];
 Board.prototype._context = null;
 
-Board.prototype.addNote = function(note, addToDb) {
+Board.prototype.addNote = function(note, doNotAddToDb) {
 	this._notes.push(note);	
-	week04.webdb.saveNote(note);
+	if (!doNotAddToDb)
+		week04.webdb.saveNote(note);
 	this.redraw();
 };
 
@@ -45,6 +46,18 @@ Board.prototype.init = function(context) {
 	this._context = context;
 	week04.webdb.open();
 	week04.webdb.createTable();
+	var that = this;
+	week04.webdb.loadNotes(function(tx, rs) {
+		for (var i =0; i< rs.rows.length; i++) {
+			var row = rs.rows.item(i);
+			var n = new Note;
+			n.setText(row.Note);
+			n.setId(row.ID);
+			n.setPosition(row.posX, row.posY);
+			n.setDate(new Date(row.date));
+			that.addNote(n, true);
+		}
+	});
 };
 
 Board.prototype.updateNotePosition = function(note, posX, posY) {
