@@ -6,6 +6,14 @@ HTMLDocument.prototype.setDefaultCursor = function() {
 	this.body.style.cursor = 'default';
 };
 
+HTMLDocument.prototype.setTextCursor = function() {
+	this.body.style.cursor = 'text';
+};
+
+HTMLDocument.prototype.setMovingCursor = function() {
+	this.body.style.cursor = 'move';
+};
+
 function Board() {
 }
 
@@ -76,6 +84,35 @@ Board.prototype.getNoteBelowCursorOnClose = function(event) {
 	}	
 }
 
+Board.prototype.getNoteBelowCursor = function(event) {
+	var noteOnPin = this.getNoteBelowCursorOnPin(event);
+	if (noteOnPin)
+		return ['Pin', noteOnPin];
+	var noteOnClose = this.getNoteBelowCursorOnClose(event);
+	if (noteOnClose)
+		return ['Close', noteOnClose];
+	var noteOnText = this.getNoteBelowCursorOnText(event);
+	if (noteOnText)
+		return ['Text', noteOnText];
+	
+	return ['Default', null];
+}
+
+Board.prototype.getNoteBelowCursorOnText = function(event) {
+	var posX = event.offsetX;
+	var posY = event.offsetY;
+	for(key in this._notes) {
+		var note = this._notes[key];
+		var noteTextPosX = note._positionX - note._pinPosX + 20;
+		var noteTextPosY = note._positionY - note._pinPosY + 100;
+		if ((noteTextPosX < posX) &&
+		    (noteTextPosX + 200 > posX) &&
+		    (noteTextPosY < posY) &&
+		    (noteTextPosY + 150 > posY))
+			return note;
+	}	
+}
+
 function Note() {
 }
 
@@ -103,8 +140,24 @@ Note.prototype.draw = function(context) {
 	context.save();
 	context.drawImage(img, this._positionX - this._pinPosX, this._positionY - this._pinPosY, this._width, this._height);	
 	context.translate(this._positionX - this._pinPosX + 32, this._positionY - this._pinPosY + 75);	
+	context.font = '7pt PT Sans';
+	context.fillText(date.format(this._date), 0,0);
+	context.translate(0, 40);
+	var words = this._text.split(" ");
 	context.font = '9pt PT Sans';
-	context.fillText(date.format(this._date), 0,0)//this._positionX - this._pinPosX + 14, this._positionY - this._pinPosY + 63);	
+	var posX = 0;
+	var posY = 0;
+	for (var i = 0; i < words.length; i++)
+	{
+		var wordLen = context.measureText(words[i]+ " ");
+		if (posX + wordLen.width < 200) {		
+			context.fillText(words[i] + " ", posX, posY);
+			posX += wordLen.width;
+		} else {
+			posY += 20;
+			posX = 0;
+		}
+	}	
 	context.restore();
 };
 
@@ -141,43 +194,59 @@ Note.prototype.setPosition = function(posX, posY) {
 	this._positionY = posY;
 };
 
+var board;
 jQuery(document).ready(function() {
 	var canvas = document.getElementById("board");
 	init(canvas);	
-	var board = new Board;	
+	board = new Board;	
 	board.init(canvas.getContext('2d'))
-	jQuery('#board').click(function() {
-		jQuery(this).off('mousemove');
+	jQuery('#board').on('mousemove', function() {
+		var result = board.getNoteBelowCursor(event);
+		if (result)		
+		{
+			if (result[0] == 'Text')
+				document.setTextCursor();
+			else if (result[0] == 'Pin' || result[0] == 'Close')
+				document.setMoveCursor();		
+			else
+				document.setDefaultCursor();
+		}
+		else
+			document.setDefaultCursor();
+	});
+	
+	jQuery('#board').on('click', function(event) {		
 		var noteToBeDeleted = board.getNoteBelowCursorOnClose(event);
 		if (noteToBeDeleted)
 		{
 			board.removeNote(noteToBeDeleted);
+			jQuery(this).attr('deleted', 'on');
+		}
+		return false;
+	});
+	
+	jQuery('#board').on('click', function() {
+		var justDeleted = jQuery(this).attr('deleted');
+		if (justDeleted)
+		{
+			jQuery(this).removeAttr('deleted');
 			return;
 		}
-			
-		var activeNote = board.getNoteBelowCursorOnPin(event);
-		if (activeNote)
-		{
-			document.setMoveCursor();
-		}
-		else
-		{
-			document.setDefaultCursor();
-		}		
+		jQuery('#board').off('mousemove', move);
 		var moving = jQuery(this).attr('move');
+		var activeNote = board.getNoteBelowCursorOnPin(event);
 		if (!activeNote && !moving)
 		{
 			var n = new Note;
 			n.setDate(new Date());
+			n.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tincidunt aliquet nunc.");
 			n.setPosition(event.offsetX, event.offsetY);
 			board.addNote(n);
 		} else {
 			if (!moving)
 			{
 				jQuery(this).attr('move','on');
-				jQuery(this).on('mousemove', function() {															
-					board.updateNotePosition(activeNote, event.offsetX, event.offsetY);
-				});
+				jQuery('#board').on('mousemove', activeNote , move);
 			}
 			else
 			{				
@@ -187,6 +256,11 @@ jQuery(document).ready(function() {
 		}
 	});
 });
+
+function move( event, activeNote) {
+	document.setMovingCursor();
+	board.updateNotePosition(event.handleObj.data, event.offsetX, event.offsetY);				
+}
 
 function init(canvas) {
 	canvas.width = document.width;
