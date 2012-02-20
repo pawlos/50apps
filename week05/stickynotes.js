@@ -77,6 +77,6 @@ function move(event) {
 }
 
 function init(canvas) {
-	canvas.width = document.width;
-	canvas.height = document.height;
+	canvas.width = document.width || 800;
+	canvas.height = document.height || 600;
 }

@@ -3,11 +3,16 @@ function Board() {
 
 Board.prototype._notes = [];
 Board.prototype._context = null;
+Board.prototype._networking = null;
 
-Board.prototype.addNote = function(note, doNotAddToDb, doNotRedraw) {
+Board.prototype.addNote = function(note, doNotAddToDb, doNotRedraw, doNotSend) {
 	this._notes.push(note);
 	if (!doNotAddToDb)
-		week04.webdb.saveNote(note);
+	{
+		week04.webdb.saveNote(note);		
+	}
+	if (!doNotSend)
+		this._networking.sendNote(note);
 	if (!doNotRedraw)
 		this.redraw();
 };
@@ -34,6 +39,7 @@ Board.prototype.init = function(context) {
 	week04.webdb.open();
 	week04.webdb.createTable();	
 	week04.webdb.loadNotes(this.parseRows);	
+	this._networking = new Networking(this);
 };
 
 Board.prototype.parseRows = function(tx, rs) {

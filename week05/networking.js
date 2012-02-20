@@ -1,12 +1,26 @@
 /* logic for sockets networking */
-var connection = new WebSocket('ws://localhost:8181/chat');
-connection.onopen = function () {	
-};
 
-connection.onmessage = function (e) {
-	console.log('Server: ',e.data);
-};
 
-function sendNote(note) {
-	connection.send(JSON.stringify(note));
+function Networking (board) {
+	this._board = board;
+	this.connection.onopen = function () {	
+	};
+	that = this;
+	this.connection.onmessage = function (e) {
+		var noteJson = JSON.parse(e.data);
+		var note = new Note;
+		note.setText(noteJson._text);
+		note.setDate(noteJson._date);
+		note.setPosition(noteJson._positionX, noteJson._positionY);
+		that._board.addNote(note, false, false, true);		
+	};
+}
+
+Networking.prototype._board = null;
+
+Networking.prototype.connection = new WebSocket('ws://localhost:8181/chat');
+
+Networking.prototype.sendNote = function(note) {
+	if (this.connection.readyState !== 0)
+		this.connection.send(JSON.stringify(note));
 }
