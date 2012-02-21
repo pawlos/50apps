@@ -10,9 +10,19 @@ function Networking (board) {
 		var noteJson = JSON.parse(e.data);
 		var note = new Note;
 		note.setText(noteJson._text);
-		note.setDate(noteJson._date);
+		note.setDate(new Date(noteJson._date));
 		note.setPosition(noteJson._positionX, noteJson._positionY);
-		that._board.addNote(note, false, false, true);		
+		var e = new Object();
+		e.offsetX = noteJson._positionX;
+		e.offsetY = noteJson._positionY;
+		var found = that._board.getNoteBelowCursor(e);
+		if (found[1] != null)
+		{
+			that._board.updateNoteText(found[1], note.getText(), true);
+			that._board.updateNotePosition(found[1], noteJson._positionX, noteJson._positionY, true);
+		}
+		else
+			that._board.addNote(note, false, false, true);		
 	};
 }
 

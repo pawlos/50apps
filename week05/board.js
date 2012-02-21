@@ -56,17 +56,21 @@ Board.prototype.parseRows = function(tx, rs) {
 };
 	
 
-Board.prototype.updateNotePosition = function(note, posX, posY) {
+Board.prototype.updateNotePosition = function(note, posX, posY, doNotSendUpdate) {
 	note.clear(this._context);
 	note.setPosition(posX, posY);
 	week04.webdb.updateNote(note);
+	if (!doNotSendUpdate)
+		this._networking.sendNote(note);
 	this.redraw();
 };
 
-Board.prototype.updateNoteText = function(note, text) {
+Board.prototype.updateNoteText = function(note, text, doNotSendUpdate) {
 	note.clear(this._context);
 	note.setText(text);
 	week04.webdb.updateNote(note);
+	if (!doNotSendUpdate)
+		this._networking.sendNote(note);
 	this.redraw();
 };
 
