@@ -18,10 +18,15 @@ function Networking (board) {
 		var found = that._board.getNoteBelowCursor(e);
 		if (found[1] != null)
 		{
-			that._board.updateNoteText(found[1], note.getText(), true);
-			that._board.updateNotePosition(found[1], noteJson._positionX, noteJson._positionY, true);
+			if (noteJson._isDeleted === true)
+				that._board.removeNote(found[1], true);
+			else
+			{
+				that._board.updateNoteText(found[1], note.getText(), true);
+				that._board.updateNotePosition(found[1], noteJson._positionX, noteJson._positionY, true);
+			}
 		}
-		else
+		else if (!noteJson._isDeleted)
 			that._board.addNote(note, false, false, true);		
 	};
 }

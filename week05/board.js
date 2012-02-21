@@ -24,11 +24,14 @@ Board.prototype.redraw = function() {
 	}
 };
 
-Board.prototype.removeNote = function(note) {
+Board.prototype.removeNote = function(note, doNotSendUpdate) {
 	var index = this._notes.indexOf(note);
 	this._notes.splice(index, 1);
 	week04.webdb.deleteNote(note);
-	note.clear(this._context);
+	note.clear(this._context);	
+	note.setDeletedFlag();
+	if (!doNotSendUpdate)
+		this._networking.sendNote(note);
 	this.redraw();
 };
 

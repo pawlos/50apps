@@ -11,6 +11,11 @@ Note.prototype._text = null;
 Note.prototype._positionX = 0;
 Note.prototype._positionY = 0;
 Note.prototype._date = "";
+Note.prototype._isDeleted = false;
+
+Note.prototype.setDeletedFlag = function() {
+	this._isDeleted = true;
+}
 
 Note.prototype.getId = function() {
 	return this._id;
