@@ -1,0 +1,21 @@
+Here goes this week's problem statement.
+
+Simple Part:
+- create a simple Snakes game using HTML5
+- the game starts when the user presses the space bar. A snake (string
+of attached squares) keeps moving in a big enough rectangular region
+in straight direction
+- using the arrow keys the user can change the direction of the snake,
+left or right
+- the challenge for the user is to not touch the boundary of the
+rectangular region
+- if the user touches the rectangle, the game ends
+- to know what a snake game is, please refer to http://www.snakegame.net/neavesnake.htm
+- add music at the background and sound effects when the snake touches
+the rectangular region
+
+Complex part: (Optional. if you complete simple part and want to take
+up something more challenging)
+- place food (single squares) randomly in the rectangular region
+- if the snake passes through the food, add one square extra to the
+lenght of the snake
