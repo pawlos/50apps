@@ -6,6 +6,10 @@ Programs from 50apps challenge.
 Folder structure
 ====
 
+week06 - Snake game in HTML5
+
+week05 - Colaborative sticky notes using WebSockets
+
 week04 - StickyNotes app in HTML5
 Usage:
 To move sticky note after placing it, click on the pin (around lower part).
