@@ -6,6 +6,7 @@ var canvas;
 var fruits = [];
 var cellSize = 12;
 var isRunning = false;
+var isGameOver = false;
 var fruitNames = ['maracuja','lime','kiwi','strawberry','watermelon','grapefruit','lemon'];
 
 jQuery(document).ready(function() {
@@ -22,17 +23,36 @@ jQuery(document).ready(function() {
 			dir = {x:cellSize, y: 0};
 		} else if (key == 40) {
 			dir = {x:0, y: +cellSize};
-		} else if (key == 27) {
+		} else if (key == 32) {
 			pause();
 		}
 	});	
-	head.x = Math.round((canvas.width() / 2 / cellSize))*cellSize;
-	head.y = Math.round((canvas.height() / 2 / cellSize))*cellSize;
+	setInitPos();
 	setInterval(mainLoop, 200);
 });
 
+function setInitPos() {
+	head.x = Math.round((canvas.width() / 2 / cellSize))*cellSize;
+	head.y = Math.round((canvas.height() / 2 / cellSize))*cellSize;
+	var rnd = Math.round(Math.random()*3);
+	if (rnd == 0)
+		dir = {x:-cellSize, y: 0};
+	else if (rnd == 1)
+		dir = {x:cellSize, y: 0};
+	else if (rnd == 2)
+		dir = {x:0, y: -cellSize};
+	else
+		dir = {x:0, y: cellSize};
+	elems = [];
+	fruits = [];
+}
+
 function pause() {
 	isRunning = !isRunning;
+	if (isGameOver) {
+		setInitPos();
+		isGameOver = false;
+	}
 }
 
 function advancePosition() {	
@@ -77,12 +97,24 @@ function hitFruit() {
 function makeSnakeBigger() {
 	delete fruits[0];
 	fruits.splice(0,1);
-	if (elems.length == 0)
-		elems.push({x: dir.x, y: dir.y});
+	if (elems.length == 0) {
+		elems.push({x: dir.x, y: dir.y});		
+	}
 	else {
 		var last = elems[elems.length-1];
-		elems.push({x: last.x, y: last.y});
+		elems.push({x: last.x, y: last.y});		
 	}
+	eatSound();
+}
+
+function eatSound() {
+	var snd = new Audio("20279__koops__apple-crunch-16.wav");
+	snd.play();
+}
+
+function bump() {
+	var snd = new Audio("31125__calethos__bump-7.wav");
+	snd.play();
 }
 
 function drawCircle(x, y, scale) {
@@ -95,20 +127,57 @@ function drawCircle(x, y, scale) {
 	ctx.stroke();
 }
 
+function hitWall() {
+	return head.x <= 0 || head.x >= canvas.width() || head.y <= 0 || head.y >= canvas.height();
+}
+
+function gameOver() {
+	ctx.font = "40pt Calibri";
+	ctx.fillColor = "#000";
+	ctx.fillText("Game Over", canvas.width()/2 - 100, canvas.height()/2);
+	isRunning = false;
+	isGameOver = true;
+}
+
+function drawBounds() {
+	ctx.strokeColor = "#444";
+	ctx.lineWidth = 2;
+	ctx.strokeRect(0,0, canvas.width(), canvas.height());
+}
+
+function bitYourself() {
+	//checking if head is in colision with any of the other parts of the body
+	var pos = {x: head.x, y: head.y};
+	for (var i in elems) {
+		var leftCorX = elems[i].x + pos.x;
+		var leftCorY = elems[i].y + pos.y;
+		var headCorX = head.x;
+		var headCorY = head.y;
+	
+		var collision = headCorX > leftCorX && headCorY > leftCorY && headCorX < leftCorX && headCorY < leftCorY;
+		if (collision)
+			return true;
+		pos = {x: leftCorX, y: leftCorY};
+	}
+	return false;
+}
+
 function mainLoop() {
 	if (!isRunning)
 		return;
 	advancePosition();
 	placeFruit();
-	//if (hitWall())
-	//{
-	//	gameOver();
-	//	clearInverval();
-	//}	
+	if (hitWall() || bitYourself())
+	{
+		bump();
+		gameOver();
+		clearInterval();
+	}	
 	if (hitFruit()) {
 		makeSnakeBigger();
 	}
 	ctx.clearRect(0,0, canvas.width(), canvas.height());
+	drawBounds();
 	//draw fruits
 	for(var id in fruits) 	{
 		var fruit = fruits[id];
