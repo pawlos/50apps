@@ -6,6 +6,7 @@ var canvas;
 var fruits = [];
 var cellSize = 12;
 var isRunning = false;
+var fruitNames = ['maracuja','lime','kiwi','strawberry','watermelon','grapefruit','lemon'];
 
 jQuery(document).ready(function() {
 	canvas = jQuery('#snakeboard');
@@ -58,11 +59,8 @@ function placeFruit() {
 }
 
 function getType() {
-	var rand = Math.random()*2;
-	if (rand < 1)
-		return 'lemon';
-	else
-		return 'grapefruit';
+	var rand = Math.round(Math.random()*6);
+	return fruitNames[rand];	
 }
 
 function hitFruit() {
@@ -87,9 +85,9 @@ function makeSnakeBigger() {
 	}
 }
 
-function drawCircle(x, y) {
+function drawCircle(x, y, scale) {
 	ctx.beginPath();
-	ctx.arc(x, y, cellSize, 0, 2*Math.PI, false);
+	ctx.arc(x, y, cellSize*scale, 0, 2*Math.PI, false);
 	ctx.fillStyle = "#8ED6FF";
 	ctx.fill();
 	ctx.lineWidth = 3;
@@ -117,11 +115,13 @@ function mainLoop() {
 		ctx.drawImage(jQuery('#'+fruit.type).get(0), fruit.x,fruit.y);
 	}
 	//draw snake	
-	drawCircle(head.x, head.y);
+	var scale = 1.0;
+	drawCircle(head.x, head.y, scale);
 	var pos = {x: head.x, y: head.y};
 	for(var cell in elems) {
 		var c = elems[cell];
 		var pos = {x: pos.x + c.x, y: pos.y + c.y};
-		drawCircle(pos.x, pos.y);
+		scale *= 0.98;
+		drawCircle(pos.x, pos.y, scale);
 	}
 }
